@@ -1,0 +1,40 @@
+name: Build LR Visual ASIO
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build driver (ASIO DLL, x64)
+        shell: pwsh
+        run: |
+          cmake -S driver -B build/driver-cmake -A x64
+          cmake --build build/driver-cmake --config Release
+          New-Item -ItemType Directory -Force build/driver | Out-Null
+          Copy-Item build/driver-cmake/Release/LRVisualASIO.dll build/driver/
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Build GUI (WPF, single-file)
+        shell: pwsh
+        run: dotnet publish app/LRVisualASIO.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o build/app
+
+      - name: Build installer (Inno Setup)
+        shell: pwsh
+        run: |
+          $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { choco install innosetup -y --no-progress }
+          & $iscc installer\LRVisualASIO.iss
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LR_Visual_ASIO_Setup
+          path: dist/LR_Visual_ASIO_Setup.exe
