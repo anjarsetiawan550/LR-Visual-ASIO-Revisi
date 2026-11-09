@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>disable</Nullable>
+    <AssemblyName>LRVisualASIO</AssemblyName>
+    <RootNamespace>LRVisualASIO</RootNamespace>
+    <Platforms>x64</Platforms>
+    <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
+    <Version>1.1.0</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <Resource Include="Assets\icon.ico" />
+    <Resource Include="Assets\icon_active.ico" />
+    <Resource Include="Assets\asio-compatible-logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NAudio.Wasapi" Version="2.2.1" />
+  </ItemGroup>
+</Project>

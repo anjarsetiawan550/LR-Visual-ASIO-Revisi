@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.20)
+project(LRVisualASIO CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded")   # CRT statis: tidak butuh VC++ Redistributable
+add_library(LRVisualASIO SHARED LRVisualASIO.cpp LRVisualASIO.def)
+target_compile_definitions(LRVisualASIO PRIVATE UNICODE _UNICODE WIN32_LEAN_AND_MEAN NOMINMAX _CRT_SECURE_NO_WARNINGS)
+target_compile_options(LRVisualASIO PRIVATE /O2 /EHsc /W3)
+target_link_libraries(LRVisualASIO PRIVATE ole32 uuid avrt advapi32 shell32)
+set_target_properties(LRVisualASIO PROPERTIES PREFIX "")
